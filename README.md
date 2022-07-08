@@ -1,6 +1,20 @@
 # TP-FTC
 
-## AFD 
+## Structure folders
+
+    ├── data                      # arquivos de entrada
+    ├── docs                      # documentação 
+    ├── out                       # output              
+    ├── src                       # Source    
+    │   ├── packages              # pacotes
+    │   │    ├── dfa.py           # Automato Finito Determinístico    
+    │   │    │
+    │   ├──  main.py              # Arquivo Principal
+    ├── Makefile                  # Build Scripts       
+    │   
+
+
+## AFD
 
 Composto por 5 tuplas `{Q, Σ, q, F, δ}`. 
 
