@@ -9,6 +9,10 @@ class CLIException(Exception):
 class InvalidDFAClass(AutomatonException):
     pass
 
+# Não é um NFA
+class InvalidNFAClass(AutomatonException):
+    pass
+
 # É um estado inválido para o autômato.
 class InvalidStateError(AutomatonException):
     pass

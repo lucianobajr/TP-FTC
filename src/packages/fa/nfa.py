@@ -1,6 +1,7 @@
 # Nondeterministic finite automaton
 
 import errors.exceptions as exceptions
+import json
 
 class NFA:
     def __init__(self, sigma={0: '0', 1: '1', 2: '\\'}):
@@ -57,10 +58,7 @@ class NFA:
             print(False)
 
     def current_state(self, string):
-        if string[0] not in self.initial_state.values():
-            raise exceptions.InitialStateError('Invalid Symbol to Initial state!')
-
-        current_state_value = self.initial_states
+        current_state_value = 'a'
 
         if len(string.strip()) == 0:
             return current_state_value
@@ -90,5 +88,5 @@ class NFA:
         print('Σ: {}'.format(self.sigma))
         print('q: {}'.format(self.initial_state))
         print('F: {}'.format(self.final_states))
-        print('δ: {}'.format(self.transitions))
+        print('δ: {}'.format(json.dumps(self.transitions, indent=4, sort_keys=True)))
         print('\n--------NFA--------\n')

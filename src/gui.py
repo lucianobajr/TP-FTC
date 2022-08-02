@@ -52,12 +52,16 @@ class App(customtkinter.CTk):
         self.label_radio_group.grid(row=0, column=0, pady=30, padx=10)
 
         self.radio_button_1 = customtkinter.CTkRadioButton(
-            master=self.frame_left, variable=self.radio_var, value=0, text="Automatos Finitos")
+            master=self.frame_left, variable=self.radio_var, value=0, text="AFD/AFN")
         self.radio_button_1.grid(row=1, column=0, pady=10, padx=10)
 
         self.radio_button_2 = customtkinter.CTkRadioButton(
-            master=self.frame_left, variable=self.radio_var, value=1, text="Automatos de Pilha")
+            master=self.frame_left, variable=self.radio_var, value=1, text="APD/APN")
         self.radio_button_2.grid(row=2, column=0, pady=10, padx=10)
+        
+        self.radio_button_3 = customtkinter.CTkRadioButton(
+            master=self.frame_left, variable=self.radio_var, value=2, text="MT/ALL")
+        self.radio_button_3.grid(row=3, column=0, pady=10, padx=10)
 
         self.label_mode = customtkinter.CTkLabel(
             master=self.frame_left, text="Tema da Aplicação:")

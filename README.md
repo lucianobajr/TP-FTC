@@ -15,8 +15,14 @@
 
 
 ## Libraries Required
-- pydot
 - customtkinter
+- json
+
+### Install Libraries required run:
+
+    $ pip3 install customtkinter
+    $ pip3 install customtkinter --upgrade
+    $ pip3 install json
 
 ## AFD
 

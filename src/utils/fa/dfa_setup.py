@@ -2,7 +2,6 @@ from packages.fa.dfa import DFA
 import errors.exceptions as exceptions
 import re
 
-
 def setup_dfa(dfa: DFA):
     if isinstance(dfa, DFA) == False:
         raise exceptions.InvalidDFAClass('Você deve passar uma classe DFA')

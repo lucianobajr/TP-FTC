@@ -1,6 +1,7 @@
 # Deterministic finite automaton
 
 import errors.exceptions as exceptions
+import json
 
 class DFA:
     def __init__(self, sigma={0: '0', 1: '1'}):
@@ -83,5 +84,5 @@ class DFA:
         print('Σ: {}'.format(self.sigma))
         print('q: {}'.format(self.initial_state))
         print('F: {}'.format(self.final_state))
-        print('δ: {}'.format(self.transitions))
+        print('δ: {}'.format(json.dumps(self.transitions, indent=4, sort_keys=True)))
         print('\n--------DFA--------\n')
