@@ -3,6 +3,8 @@
 class AutomatonException(Exception):
     pass
 
+class CLIException(Exception):
+    pass
 # Não é um DFA
 class InvalidDFAClass(AutomatonException):
     pass
@@ -33,4 +35,8 @@ class FinalStateError(AutomatonException):
 
 # A entrada foi rejeitada pelo autômato
 class RejectionException(AutomatonException):
+    pass
+
+# Tipo de Máquina é inválido
+class TypeMachineException(CLIException):
     pass

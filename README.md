@@ -16,6 +16,7 @@
 
 ## Libraries Required
 - pydot
+- customtkinter
 
 ## AFD
 
