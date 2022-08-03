@@ -13,8 +13,10 @@ if __name__ == "__main__":
     if type == "@AFD":
         dfa = DFA()
         setup_dfa(dfa)
+        dfa.display()
         inputs_dfa(dfa)
     elif type == "@AFN":
         nfa = NFA()
         setup_nfa(nfa)
+        nfa.display()
         inputs_nfa(nfa)

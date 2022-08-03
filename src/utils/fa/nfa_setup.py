@@ -1,77 +1,23 @@
 from packages.fa.nfa import NFA
 import errors.exceptions as exceptions
-import re
 
 def setup_nfa(nfa: NFA):
     if isinstance(nfa, NFA) == False:
         raise exceptions.InvalidNFAClass('Você deve passar uma classe NFA')
 
-    print('Q:', end=' ')
-    states_tmp = input()
+    nfa.set_states(set_Q())
 
-    states = dict()
+    sigma = set_S()
 
-    for state in states_tmp:
-        if state != " ":
-            states[len(states)] = state
+    if sigma != None:
+        nfa.set_sigma(sigma)
 
-    nfa.set_states(states)
-
-    print('S:', end=' ')
-    sigma = input()
-    if len(sigma.strip()) != 0:
-        nfa.set_sigma(convert_sigma_to_dict(sigma))
-
-    pattern = r'^[A-Za-z0-9]{1}$'
-
-    print('I:', end=' ')
-    initial_states_tmp = input()
-    initial_states = dict()
-
-    for state in initial_states_tmp:
-        if state != " ":
-            if bool(re.match(pattern, state)) == False:
-                raise exceptions.InvalidStateError(
-                    'Você deve passar um estado inicial válido')
-            initial_states[len(initial_states)] = state
-
-    nfa.set_initial_states(initial_states)
-
-    print('F:', end=' ')
-    final_states_tmp = input()
-    final_states = dict()
-
-    for state in final_states_tmp:
-        if state != " ":
-            final_states[len(final_states)] = state
-
-    nfa.set_final_states(final_states)
-
-    transitions = dict()
-
-    line = ""
-
-    while True:
-        line = input()
-
-        if line != "---":
-
-            from_state = line[0]
-            to_state = line[5]
-            values = line.split("| ")[1]
-
-            for value in values:
-                if value != " ":
-                    add_transition_dfa(
-                        transitions=transitions, from_state=from_state, to=to_state, value=value)
-            line = ""
-        else:
-            break
-
-    nfa.set_transitions(transitions)
+    nfa.set_initial_states(set_I())
+    nfa.set_final_states(set_F())
+    nfa.set_transitions(set_transactions())
 
 
-def add_transition_dfa(transitions, from_state, to, value):
+def add_transition_nfa(transitions, from_state, to, value):
     value_aux = None
 
     if value == "\\":
@@ -84,9 +30,13 @@ def add_transition_dfa(transitions, from_state, to, value):
             transitions[from_state][value_aux] = transitions[from_state][value_aux].union(
                 to)
         else:
-            transitions[from_state][value_aux] = to
+            if value_aux not in transitions[from_state]:
+                transitions[from_state][value_aux] = [to]
+            else:
+                transitions[from_state][value_aux].extend([to])
+
     else:
-        transitions[from_state] = {value_aux: to}
+        transitions[from_state] = {value_aux: [to]}
 
 
 def convert_sigma_to_dict(sigma):
@@ -104,7 +54,7 @@ def convert_sigma_to_dict(sigma):
 
 def inputs_nfa(nfa: NFA):
     if isinstance(nfa, NFA) == False:
-        raise exceptions.InvalidDFAClass('Você deve passar uma classe NFA')
+        raise exceptions.InvalidNFAClass('Você deve passar uma classe NFA')
 
     while True:
         print('Entrada:', end=' ')
@@ -115,3 +65,76 @@ def inputs_nfa(nfa: NFA):
 
         nfa.check_input(input_value)
         input_value = None
+
+
+def set_Q():
+    print('Q:', end=' ')
+    states_tmp = input()
+
+    states = dict()
+
+    states_splited = states_tmp.split(" ")
+
+    for state in states_splited:
+        states[len(states)] = state
+
+    return states
+
+
+def set_S():
+    print('S:', end=' ')
+    sigma = input()
+    if len(sigma.strip()) != 0:
+        return convert_sigma_to_dict(sigma)
+
+
+def set_I():
+    print('I:', end=' ')
+    initial_states_tmp = input()
+    initial_states = dict()
+
+    initial_states_splited = initial_states_tmp.split(" ")
+
+    for state in initial_states_splited:
+        initial_states[len(initial_states)] = state
+
+    return initial_states
+
+
+def set_F():
+    print('F:', end=' ')
+    final_states_tmp = input()
+    final_states = dict()
+
+    final_states_splited = final_states_tmp.split(" ")
+
+    for state in final_states_splited:
+        final_states[len(final_states)] = state
+
+    return final_states
+
+
+def set_transactions():
+    transitions = dict()
+
+    line = ""
+
+    while True:
+        line = input()
+
+        if line != "---":
+            line_splited = line.split(" ")
+            line_splited.remove("->")
+            line_splited.remove("|")
+
+            from_state = line_splited[0]
+            to_state = line_splited[1]
+            values = line_splited[2:]
+
+            for value in values:
+                add_transition_nfa(transitions, from_state, to_state, value)
+            line = ""
+        else:
+            break
+
+    return transitions

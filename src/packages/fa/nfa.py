@@ -3,14 +3,16 @@
 import errors.exceptions as exceptions
 import json
 
+
 class NFA:
     def __init__(self, sigma={0: '0', 1: '1', 2: '\\'}):
         self.states = dict()             # Q : conjunto de todos os estados.
         self.sigma = sigma               # Σ : conjunto de símbolos de entrada ou alfabeto
-        self.initial_states = dict()     # Q : conjunto não vazio de estados iniciais.
+        # Q : conjunto não vazio de estados iniciais.
+        self.initial_states = dict()
         self.final_states = dict()       # F : conjunto de estados finais
         self.transitions = dict()        # δ : função de Transição
-    
+
         # estado de erro
     @staticmethod
     def epsilon():
@@ -57,27 +59,20 @@ class NFA:
         if current_state not in self.final_states:
             print(False)
 
-    def current_state(self, string):
-        current_state_value = 'a'
+    def check(self, string):
+        initial_states_used = self.initial_states.copy()
+        print(initial_states_used)
 
-        if len(string.strip()) == 0:
-            return current_state_value
-        else:
-            for symbol in string:
-                self.check_symbol_in_sigma(symbol=symbol)
-                current_state_value = self.get_next_current_state(
-                    current_state_value, symbol)
-
-            return current_state_value
+        return False
 
     def check_input(self, input_str):
         '''
             Confere que se o estado em que encerrou a computação é final
         '''
 
-        state = self.current_state(input_str)
+        state = self.check(input_str)
 
-        if state in self.final_states.values():
+        if state == True:
             print("OK")
         else:
             print("X")
