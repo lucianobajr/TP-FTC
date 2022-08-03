@@ -1,0 +1,12 @@
+@AFN
+q1 q2 q3 f
+ab\
+q1
+f
+q1 -> q2 | a
+q1 -> q3 | a
+q2 -> f | a
+---
+aa
+a
+aaa

@@ -1,7 +1,21 @@
 # Deterministic finite automaton
 
 import errors.exceptions as exceptions
+import json
 
+'''initial_states_used.pop(i)
+            for symbol in string:
+                self.check_symbol_in_sigma(symbol=symbol)
+                if symbol in self.transitions[current_state_value]:
+                    print(self.transitions[current_state_value][symbol])
+
+            if current_state_value in self.final_states.values():
+                return True
+            
+        return False
+for state in self.transitions[current_state_value][symbol]:
+                        current_state_value = self.transitions[current_state_value][symbol][state]
+'''
 
 class DFA:
     def __init__(self, sigma={0: '0', 1: '1'}):
@@ -28,6 +42,19 @@ class DFA:
     def set_transitions(self, transitions):
         self.transitions = transitions
 
+    def set_sigma(self, sigma):
+        self.sigma = sigma.copy()
+
+    def add_transition(self,from_state,to,value):
+        if from_state in self.transitions:
+            if to in self.transitions[from_state]:
+                self.transitions[from_state][value] = self.transitions[from_state][value].union(
+                    to)
+            else:
+                self.transitions[from_state][value] = to
+        else:
+            self.transitions[from_state] = {value: to}
+
     def add_final_state(self, states):
         for state in states:
             self.final_state.add(state)
@@ -40,8 +67,8 @@ class DFA:
 
     def get_next_current_state(self, current_state, input_symbol):
         """
-        Follow the transition for the given input symbol on the current state.
-        Raise an error if the transition does not exist.
+        Siga a transição para o símbolo de entrada fornecido no estado atual.
+        Gere um erro se a transição não existir.
         """
         if input_symbol in self.transitions[current_state]:
             return self.transitions[current_state][input_symbol]
@@ -67,7 +94,6 @@ class DFA:
         '''
             Confere que se o estado em que encerrou a computação é final
         '''
-
         state = self.current_state(input_str)
 
         if state in self.final_state.values():
@@ -81,5 +107,5 @@ class DFA:
         print('Σ: {}'.format(self.sigma))
         print('q: {}'.format(self.initial_state))
         print('F: {}'.format(self.final_state))
-        print('δ: {}'.format(self.transitions))
+        print('δ: {}'.format(json.dumps(self.transitions, indent=4, sort_keys=True)))
         print('\n--------DFA--------\n')

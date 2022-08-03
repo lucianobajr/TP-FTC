@@ -4,18 +4,30 @@
 
     ├── data                      # arquivos de entrada
     ├── docs                      # documentação 
-    ├── out                       # output              
-    ├── src                       # Source    
+    ├── src                       # Source 
+    │   ├── errors                  # expections errors              
+    │   ├── utils                   # setups to machines and utils
     │   ├── packages              # pacotes
     │   │    ├── dfa.py           # Automato Finito Determinístico    
-    │   │    │
-    │   ├──  main.py              # Arquivo Principal
-    ├── Makefile                  # Build Scripts       
+    │   │    │── fna.py           # Automato Finito Não determinístico
+    │   ├──  cli.py              # Arquivo Principal cli
+    │   ├──  gui.py              # Arquivo Principal gui       
     │   
+
+## Architecture
+
+![SO](https://user-images.githubusercontent.com/45442173/182651535-8ba41749-c875-4767-b22d-71e79bcf3908.png)
 
 
 ## Libraries Required
-- pydot
+- customtkinter
+- json
+
+### Install Libraries required run:
+
+    $ pip3 install customtkinter
+    $ pip3 install customtkinter --upgrade
+    $ pip3 install json
 
 ## AFD
 
@@ -48,3 +60,7 @@ Composto por 7 tuplas (Q, Σ, Γ, q0, Z, F, δ).
     Z:  é o símbolo de empilhamento inicial (que está inicialmente presente na pilha)
     F:  é o conjunto dos estados finais
     δ:  é uma função de transição que mapeia Q x {Σ ∪ ∈} x Γ em Q x Γ*. Em um determinado estado, o PDA lerá o símbolo de entrada e o símbolo da pilha (topo da pilha) e passará para um novo estado e alterará o símbolo da pilha.
+
+## GUI
+
+![interface](https://user-images.githubusercontent.com/45442173/182651519-0579cf66-9409-43db-9a9b-7031dee12052.png)
