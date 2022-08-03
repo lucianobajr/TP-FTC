@@ -44,3 +44,6 @@ class RejectionException(AutomatonException):
 # Tipo de Máquina é inválido
 class TypeMachineException(CLIException):
     pass
+
+class NondeterminismError(AutomatonException):
+    pass

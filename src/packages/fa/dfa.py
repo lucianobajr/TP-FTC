@@ -3,15 +3,17 @@
 import errors.exceptions as exceptions
 import json
 
-'''
-initial_states_used.pop(0)
-        for symbol in string:
-            print(symbol)
-        if current_state_value in self.final_state.values():
-            return True
-self.check_symbol_in_sigma(symbol=symbol)
+'''initial_states_used.pop(i)
+            for symbol in string:
+                self.check_symbol_in_sigma(symbol=symbol)
                 if symbol in self.transitions[current_state_value]:
-                    for state in self.transitions[current_state_value][symbol]:
+                    print(self.transitions[current_state_value][symbol])
+
+            if current_state_value in self.final_states.values():
+                return True
+            
+        return False
+for state in self.transitions[current_state_value][symbol]:
                         current_state_value = self.transitions[current_state_value][symbol][state]
 '''
 
@@ -82,10 +84,7 @@ class DFA:
         '''
             Confere que se o estado em que encerrou a computação é final
         '''
-
-        state = self.current_state(input_str)
-
-        if state in self.final_state.values():
+        if self.input_check(input_str):
             print("OK")
         else:
             print("X")

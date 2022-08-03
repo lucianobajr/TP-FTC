@@ -1,6 +1,7 @@
 from packages.fa.nfa import NFA
 import errors.exceptions as exceptions
 
+
 def setup_nfa(nfa: NFA):
     if isinstance(nfa, NFA) == False:
         raise exceptions.InvalidNFAClass('Você deve passar uma classe NFA')
@@ -31,12 +32,12 @@ def add_transition_nfa(transitions, from_state, to, value):
                 to)
         else:
             if value_aux not in transitions[from_state]:
-                transitions[from_state][value_aux] = [to]
+                transitions[from_state][value_aux] = {to}
             else:
-                transitions[from_state][value_aux].extend([to])
+                transitions[from_state][value_aux].add(to)
 
     else:
-        transitions[from_state] = {value_aux: [to]}
+        transitions[from_state] = {value_aux: {to}}
 
 
 def convert_sigma_to_dict(sigma):

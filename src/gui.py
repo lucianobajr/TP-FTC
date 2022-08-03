@@ -2,6 +2,10 @@ import tkinter
 import customtkinter
 from tkinter.messagebox import showinfo
 
+from packages.fa.dfa import DFA
+from packages.fa.nfa import NFA
+import utils.gui_setup as setup
+
 # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_appearance_mode("System")
 # Themes: "blue" (standard), "green", "dark-blue"
@@ -9,12 +13,14 @@ customtkinter.set_default_color_theme("blue")
 
 
 class App(customtkinter.CTk):
-
     WIDTH = 780
-    HEIGHT = 520
+    HEIGHT = 820
 
     def __init__(self):
         super().__init__()
+
+        self.dfa = DFA()
+        self.nfa = DFA()
 
         self.title("TRABALHO PRÁTICO - FTC")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
@@ -51,17 +57,21 @@ class App(customtkinter.CTk):
             master=self.frame_left, text="Tipos", text_font=("Roboto Medium", -16))
         self.label_radio_group.grid(row=0, column=0, pady=30, padx=10)
 
+        self.radio_var = tkinter.IntVar(value=0)
+
         self.radio_button_1 = customtkinter.CTkRadioButton(
-            master=self.frame_left, variable=self.radio_var, value=0, text="AFD/AFN")
+            master=self.frame_left, variable=self.radio_var, value=0, text="AFD")
         self.radio_button_1.grid(row=1, column=0, pady=10, padx=10)
+        
 
         self.radio_button_2 = customtkinter.CTkRadioButton(
-            master=self.frame_left, variable=self.radio_var, value=1, text="APD/APN")
+            master=self.frame_left, value=1, variable=self.radio_var ,text="AFN")
         self.radio_button_2.grid(row=2, column=0, pady=10, padx=10)
         
         self.radio_button_3 = customtkinter.CTkRadioButton(
-            master=self.frame_left, variable=self.radio_var, value=2, text="MT/ALL")
+            master=self.frame_left, variable=self.radio_var, value=2, text="APD/APN")
         self.radio_button_3.grid(row=3, column=0, pady=10, padx=10)
+        self.radio_button_3.configure(state=tkinter.DISABLED)
 
         self.label_mode = customtkinter.CTkLabel(
             master=self.frame_left, text="Tema da Aplicação:")
@@ -74,8 +84,8 @@ class App(customtkinter.CTk):
         # ============ frame_right ============
 
         # configure grid layout (3x7)
-        self.frame_right.rowconfigure((0, 1, 2, 3), weight=1)
-        self.frame_right.rowconfigure(7, weight=10)
+        #self.frame_right.rowconfigure((0, 1, 2, 3), weight=1)
+        #self.frame_right.rowconfigure(7, weight=10)
         self.frame_right.columnconfigure((0, 1), weight=1)
         self.frame_right.columnconfigure(2, weight=0)
 
@@ -90,9 +100,8 @@ class App(customtkinter.CTk):
         self.frame_info.columnconfigure(0, weight=1)
 
         self.label_info_1 = customtkinter.CTkLabel(master=self.frame_info,
-                                                   text="CTkLabel: Lorem ipsum dolor sit,\n" +
-                                                        "amet consetetur sadipscing elitr,\n" +
-                                                        "sed diam nonumy eirmod tempor",
+                                                   text="Preencha todos os inputs\n" +
+                                                        "Antes de computar uma palavra\n",
                                                    height=100,
                                                    corner_radius=6,  # <- custom corner radius
                                                    # <- custom tuple-color
@@ -101,96 +110,108 @@ class App(customtkinter.CTk):
                                                    justify=tkinter.LEFT)
         self.label_info_1.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
 
-        self.progressbar = customtkinter.CTkProgressBar(master=self.frame_info)
-        self.progressbar.grid(row=1, column=0, sticky="ew", padx=15, pady=15)
 
         # ============ frame_right ============
 
-        self.radio_var = tkinter.IntVar(value=0)
-
-        self.label_radio_group = customtkinter.CTkLabel(master=self.frame_right,
-                                                        text="CTkRadioButton Group:")
-        self.label_radio_group.grid(
-            row=0, column=2, columnspan=1, pady=20, padx=10, sticky="")
-
-        self.radio_button_1 = customtkinter.CTkRadioButton(master=self.frame_right,
-                                                           variable=self.radio_var,
-                                                           value=0)
-        self.radio_button_1.grid(row=1, column=2, pady=10, padx=20, sticky="n")
-
-        self.radio_button_2 = customtkinter.CTkRadioButton(master=self.frame_right,
-                                                           variable=self.radio_var,
-                                                           value=1)
-        self.radio_button_2.grid(row=2, column=2, pady=10, padx=20, sticky="n")
-
-        self.radio_button_3 = customtkinter.CTkRadioButton(master=self.frame_right,
-                                                           variable=self.radio_var,
-                                                           value=2)
-        self.radio_button_3.grid(row=3, column=2, pady=10, padx=20, sticky="n")
-
-        self.slider_1 = customtkinter.CTkSlider(master=self.frame_right,
-                                                from_=0,
-                                                to=1,
-                                                number_of_steps=3,
-                                                command=self.progressbar.set)
-        self.slider_1.grid(row=4, column=0, columnspan=2,
-                           pady=10, padx=20, sticky="we")
-
-        self.slider_2 = customtkinter.CTkSlider(master=self.frame_right,
-                                                command=self.progressbar.set)
-        self.slider_2.grid(row=5, column=0, columnspan=2,
-                           pady=10, padx=20, sticky="we")
-
-        self.switch_1 = customtkinter.CTkSwitch(master=self.frame_right,
-                                                text="CTkSwitch")
-        self.switch_1.grid(row=4, column=2, columnspan=1,
-                           pady=10, padx=20, sticky="we")
-
-        self.switch_2 = customtkinter.CTkSwitch(master=self.frame_right,
-                                                text="CTkSwitch")
-        self.switch_2.grid(row=5, column=2, columnspan=1,
-                           pady=10, padx=20, sticky="we")
-
-        self.combobox_1 = customtkinter.CTkComboBox(master=self.frame_right,
-                                                    values=["Value 1", "Value 2"])
-        self.combobox_1.grid(row=6, column=2, columnspan=1,
-                             pady=10, padx=20, sticky="we")
-
-        self.check_box_1 = customtkinter.CTkCheckBox(master=self.frame_right,
-                                                     text="CTkCheckBox")
-        self.check_box_1.grid(row=6, column=0, pady=10, padx=20, sticky="w")
-
-        self.check_box_2 = customtkinter.CTkCheckBox(master=self.frame_right,
-                                                     text="CTkCheckBox")
-        self.check_box_2.grid(row=6, column=1, pady=10, padx=20, sticky="w")
-
         self.entry = customtkinter.CTkEntry(master=self.frame_right,
                                             width=120,
-                                            placeholder_text="CTkEntry")
-        self.entry.grid(row=8, column=0, columnspan=2,
+                                            placeholder_text="Estados")
+        self.entry.grid(row=4, column=0, columnspan=2,
                         pady=20, padx=20, sticky="we")
 
         self.button_5 = customtkinter.CTkButton(master=self.frame_right,
-                                                text="CTkButton",
+                                                text="definir",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
                                                 command=self.button_event)
-        self.button_5.grid(row=8, column=2, columnspan=1,
+        self.button_5.grid(row=4, column=2, columnspan=1,
+                           pady=20, padx=20, sticky="we")
+
+        self.entry_1 = customtkinter.CTkEntry(master=self.frame_right,
+                                            width=120,
+                                            placeholder_text="Alfabeto")
+        self.entry_1.grid(row=5, column=0, columnspan=2,
+                        pady=20, padx=20, sticky="we")
+
+        self.button_6 = customtkinter.CTkButton(master=self.frame_right,
+                                                text="definir",
+                                                border_width=2,  # <- custom border_width
+                                                fg_color=None,  # <- no fg_color
+                                                command=self.button_event_option_2)
+        self.button_6.grid(row=5, column=2, columnspan=1,
+                           pady=20, padx=20, sticky="we")
+
+        self.entry_2 = customtkinter.CTkEntry(master=self.frame_right,
+                                            width=120,
+                                            placeholder_text="Estado Inicial")
+        self.entry_2.grid(row=6, column=0, columnspan=2,
+                        pady=20, padx=20, sticky="we")
+
+        self.button_7 = customtkinter.CTkButton(master=self.frame_right,
+                                                text="definir",
+                                                border_width=2,  # <- custom border_width
+                                                fg_color=None,  # <- no fg_color
+                                                command=self.button_event)
+        self.button_7.grid(row=6, column=2, columnspan=1,
+                           pady=20, padx=20, sticky="we")
+
+        self.entry_3 = customtkinter.CTkEntry(master=self.frame_right,
+                                            width=120,
+                                            placeholder_text="Estado Final")
+        self.entry_3.grid(row=7, column=0, columnspan=2,
+                        pady=20, padx=20, sticky="we")
+
+        self.button_8 = customtkinter.CTkButton(master=self.frame_right,
+                                                text="definir",
+                                                border_width=2,  # <- custom border_width
+                                                fg_color=None,  # <- no fg_color
+                                                command=self.button_event)
+        self.button_8.grid(row=7, column=2, columnspan=1,
+                           pady=20, padx=20, sticky="we")
+
+        self.entry_4 = customtkinter.CTkEntry(master=self.frame_right,
+                                            width=120,
+                                            placeholder_text="Transição")
+        self.entry_4.grid(row=8, column=0, columnspan=2,
+                        pady=20, padx=20, sticky="we")
+
+        self.button_9 = customtkinter.CTkButton(master=self.frame_right,
+                                                text="adicionar",
+                                                border_width=2,  # <- custom border_width
+                                                fg_color=None,  # <- no fg_color
+                                                command=self.button_event)
+        self.button_9.grid(row=8, column=2, columnspan=1,
+                           pady=20, padx=20, sticky="we")
+
+        self.entry_5 = customtkinter.CTkEntry(master=self.frame_right,
+                                            width=120,
+                                            placeholder_text="Palavra")
+        self.entry_5.grid(row=10, column=0, columnspan=2,
+                        pady=20, padx=20, sticky="we")
+
+        self.button_10 = customtkinter.CTkButton(master=self.frame_right,
+                                                text="Computar!",
+                                                border_width=2,  # <- custom border_width
+                                                fg_color=None,  # <- no fg_color
+                                                command=self.button_event)
+        self.button_10.grid(row=10, column=2, columnspan=1,
                            pady=20, padx=20, sticky="we")
 
         # set default values
-        self.optionmenu_1.set("Dark")
-        # self.button_3.configure(state="disabled", text="Disabled CTkButton")
-        self.combobox_1.set("CTkCombobox")
-        self.radio_button_1.select()
-        self.slider_1.set(0.2)
-        self.slider_2.set(0.7)
-        self.progressbar.set(0.5)
-        self.switch_2.select()
-        self.radio_button_3.configure(state=tkinter.DISABLED)
-        self.check_box_1.configure(
-            state=tkinter.DISABLED, text="CheckBox disabled")
-        self.check_box_2.select()
+        self.optionmenu_1.set("Dark")    
+
+    def button_event_option_2(self):
+        if self.radio_var.get() == 0:
+            sigma = setup.set_S_dfa(self.entry_1.get())
+            if sigma != None:
+                self.dfa.set_sigma()
+            self.dfa.display()
+        else:
+            sigma = setup.set_S_nfa(self.entry_1.get())
+            if sigma != None:
+                self.nfa.set_sigma()
+            self.nfa.display()
+
 
     def button_event(self):
         showinfo("Window", "Hello World!", icon="error")
