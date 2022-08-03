@@ -20,7 +20,10 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.dfa = DFA()
-        self.nfa = DFA()
+        self.nfa = NFA()
+        self.transitions_dfa = dict()
+        self.transitions_nfa = dict()
+
 
         self.title("TRABALHO PRÁTICO - FTC")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
@@ -123,7 +126,7 @@ class App(customtkinter.CTk):
                                                 text="definir",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
-                                                command=self.button_event)
+                                                command=self.button_event_option_1)
         self.button_5.grid(row=4, column=2, columnspan=1,
                            pady=20, padx=20, sticky="we")
 
@@ -151,7 +154,7 @@ class App(customtkinter.CTk):
                                                 text="definir",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
-                                                command=self.button_event)
+                                                command=self.button_event_option_3)
         self.button_7.grid(row=6, column=2, columnspan=1,
                            pady=20, padx=20, sticky="we")
 
@@ -165,7 +168,7 @@ class App(customtkinter.CTk):
                                                 text="definir",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
-                                                command=self.button_event)
+                                                command=self.button_event_option_4)
         self.button_8.grid(row=7, column=2, columnspan=1,
                            pady=20, padx=20, sticky="we")
 
@@ -179,7 +182,7 @@ class App(customtkinter.CTk):
                                                 text="adicionar",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
-                                                command=self.button_event)
+                                                command=self.button_event_option_5)
         self.button_9.grid(row=8, column=2, columnspan=1,
                            pady=20, padx=20, sticky="we")
 
@@ -200,22 +203,85 @@ class App(customtkinter.CTk):
         # set default values
         self.optionmenu_1.set("Dark")    
 
+    def button_event_option_1(self):
+        if self.radio_var.get() == 0:
+            self.dfa.set_states(setup.set_Q(self.entry.get()))
+            self.dfa.display()
+        else:
+            self.nfa.set_states(setup.set_Q(self.entry.get()))
+            self.nfa.display()
+
     def button_event_option_2(self):
         if self.radio_var.get() == 0:
             sigma = setup.set_S_dfa(self.entry_1.get())
             if sigma != None:
-                self.dfa.set_sigma()
+                self.dfa.set_sigma(sigma)
             self.dfa.display()
         else:
             sigma = setup.set_S_nfa(self.entry_1.get())
             if sigma != None:
-                self.nfa.set_sigma()
+                self.nfa.set_sigma(sigma)
+            self.nfa.display()
+
+    def button_event_option_3(self):
+        if self.radio_var.get() == 0:
+            self.dfa.set_initial_state(setup.set_i(self.entry_2.get()))
+            self.dfa.display()
+        else:
+            self.nfa.set_initial_states(setup.set_I(self.entry_2.get()))
+            self.nfa.display()
+
+    def button_event_option_4(self):
+        if self.radio_var.get() == 0:
+            self.dfa.set_final_state(setup.set_F(self.entry_3.get()))
+            self.dfa.display()
+        else:
+            self.nfa.set_final_states(setup.set_F(self.entry_3.get()))
+            self.nfa.display()
+
+    def button_event_option_5(self):
+        if self.radio_var.get() == 0:
+            line_splited = self.entry_4.get().split(" ")
+            line_splited.remove("->")
+            line_splited.remove("|")
+
+            from_state = line_splited[0]
+            to_state = line_splited[1]
+            values = line_splited[2:]
+
+            for value in values:
+                self.dfa.add_transition(from_state, to_state, value)
+
+            self.dfa.display()
+        else:
+            line_splited = self.entry_4.get().split(" ")
+            line_splited.remove("->")
+            line_splited.remove("|")
+
+            from_state = line_splited[0]
+            to_state = line_splited[1]
+            values = line_splited[2:]
+
+            for value in values:
+                self.nfa.add_transition(from_state, to_state, value)
+        
             self.nfa.display()
 
 
     def button_event(self):
-        showinfo("Window", "Hello World!", icon="error")
-        print(self.entry.get())
+        if self.radio_var.get() == 0:
+            state = self.dfa.current_state(self.entry_5.get())
+            
+            if state in self.dfa.final_state.values():
+                showinfo("Window", "OK", icon="info")
+            else:
+                showinfo("Window", "X", icon="error")
+        else:
+            if self.nfa.check(self.entry_5.get()) == True:
+                showinfo("Window", "OK", icon="info")
+            else:
+                showinfo("Window", "X", icon="error")
+
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)

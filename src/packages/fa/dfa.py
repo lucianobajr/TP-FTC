@@ -45,6 +45,16 @@ class DFA:
     def set_sigma(self, sigma):
         self.sigma = sigma.copy()
 
+    def add_transition(self,from_state,to,value):
+        if from_state in self.transitions:
+            if to in self.transitions[from_state]:
+                self.transitions[from_state][value] = self.transitions[from_state][value].union(
+                    to)
+            else:
+                self.transitions[from_state][value] = to
+        else:
+            self.transitions[from_state] = {value: to}
+
     def add_final_state(self, states):
         for state in states:
             self.final_state.add(state)
@@ -84,7 +94,9 @@ class DFA:
         '''
             Confere que se o estado em que encerrou a computação é final
         '''
-        if self.input_check(input_str):
+        state = self.current_state(input_str)
+
+        if state in self.final_state.values():
             print("OK")
         else:
             print("X")

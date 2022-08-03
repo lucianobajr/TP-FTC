@@ -69,28 +69,18 @@ def add_transition_dfa(transitions, from_state, to, value):
     else:
         transitions[from_state] = {value: to}
 
-def set_transactions_dfa():
-    transitions = dict()
+def set_transactions_dfa(transitions,line):
 
-    line = ""
+    line_splited = line.split(" ")
+    line_splited.remove("->")
+    line_splited.remove("|")
 
-    while True:
-        line = input()
+    from_state = line_splited[0]
+    to_state = line_splited[1]
+    values = line_splited[2:]
 
-        if line != "---":
-            line_splited = line.split(" ")
-            line_splited.remove("->")
-            line_splited.remove("|")
-
-            from_state = line_splited[0]
-            to_state = line_splited[1]
-            values = line_splited[2:]
-
-            for value in values:
-                add_transition_dfa(transitions, from_state, to_state, value)
-            line = ""
-        else:
-            break
+    for value in values:
+        add_transition_dfa(transitions, from_state, to_state, value)
 
     return transitions
 
@@ -115,27 +105,16 @@ def add_transition_nfa(transitions, from_state, to, value):
     else:
         transitions[from_state] = {value_aux: {to}}
 
-def set_transactions_nfa():
-    transitions = dict()
+def set_transactions_nfa(transitions,line):
+    line_splited = line.split(" ")
+    line_splited.remove("->")
+    line_splited.remove("|")
 
-    line = ""
+    from_state = line_splited[0]
+    to_state = line_splited[1]
+    values = line_splited[2:]
 
-    while True:
-        line = input()
-
-        if line != "---":
-            line_splited = line.split(" ")
-            line_splited.remove("->")
-            line_splited.remove("|")
-
-            from_state = line_splited[0]
-            to_state = line_splited[1]
-            values = line_splited[2:]
-
-            for value in values:
-                add_transition_nfa(transitions, from_state, to_state, value)
-            line = ""
-        else:
-            break
+    for value in values:
+        add_transition_nfa(transitions, from_state, to_state, value)
 
     return transitions

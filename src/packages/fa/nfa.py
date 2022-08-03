@@ -3,6 +3,7 @@
 import errors.exceptions as exceptions
 from collections import deque
 
+
 class NFA:
     def __init__(self, sigma={0: '0', 1: '1', 2: '\\'}):
         self.states = dict()             # Q : conjunto de todos os estados.
@@ -35,6 +36,26 @@ class NFA:
     def add_initial_state(self, states):
         for state in states:
             self.initial_states.add(state)
+
+    def add_transition(self, from_state, to, value):
+        value_aux = None
+
+        if value == "\\":
+            value_aux = "\\"
+        else:
+            value_aux = value
+        
+        if from_state in self.transitions:
+            if to in self.transitions[from_state]:
+                self.transitions[from_state][value_aux] = self.transitions[from_state][value_aux].union(
+                    to)
+            else:
+                if value_aux not in self.transitions[from_state]:
+                    self.transitions[from_state][value_aux] = {to}
+                else:
+                    self.transitions[from_state][value_aux].add(to)
+        else:
+            self.transitions[from_state] = {value_aux: {to}}
 
     def add_final_state(self, states):
         for state in states:
