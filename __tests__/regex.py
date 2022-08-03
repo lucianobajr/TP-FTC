@@ -1,4 +1,4 @@
-import re
-pattern = r'^[A-Za-z0-9]{1,7}$'
+test = dict()
 
-print(bool(re.match(pattern,'ABCDE')))
+if 'a' not in test['q1']: 
+    test['q1'] = test['q1'].union()

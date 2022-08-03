@@ -3,6 +3,18 @@
 import errors.exceptions as exceptions
 import json
 
+'''
+initial_states_used.pop(0)
+        for symbol in string:
+            print(symbol)
+        if current_state_value in self.final_state.values():
+            return True
+self.check_symbol_in_sigma(symbol=symbol)
+                if symbol in self.transitions[current_state_value]:
+                    for state in self.transitions[current_state_value][symbol]:
+                        current_state_value = self.transitions[current_state_value][symbol][state]
+'''
+
 class DFA:
     def __init__(self, sigma={0: '0', 1: '1'}):
         self.states = dict()              # Q : conjunto de todos os estados.

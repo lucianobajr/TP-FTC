@@ -19,6 +19,7 @@ if __name__ == "__main__":
     elif type == "@AFN":
         nfa = NFA()
         setup_nfa(nfa)
+        nfa.display()
         inputs_nfa(nfa)
 
     elif type == "@APD":
